@@ -6,31 +6,73 @@ First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Integrantes  
+- Gustavo Galvão – RM: 565969  
+- Lucas Tamura – RM: 563249  
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Objetivo da Sprint
+Nesta Sprint, nosso time criou a base do aplicativo mobile ReUse. O foco principal foi estabelecer uma organização de interface, usando os componentes do React Native. Com o foco em facilitar o acesso a componentes de hardware de forma sustentável e econômica.
 
-## Learn More
+## Desafio
+O objetivo é enriquecer o nosso app em React Native para utilizar/consumir APIs externas. Além disso, vamos utilizar os recursos de autenticação, sessões e caching local. 
 
-To learn more about Next.js, take a look at the following resources:
+## YOUTUBE LINK
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Ferramentas utilizadas  
+React NextJS, Prisma OR e PostgreSQL
 
-## Deploy on Vercel
+## INSTRUÇÕES PARA AQUELES QUE QUEREM RODAR O PROJETO PURO
+Siga estas instruções simples para configurar o ambiente e testar a plataforma:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1 -  Clone o repositório no terminal:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+git clone [[https://github.com/seu-usuario/ReUse-App-Firebase-API](https://github.com/seu-usuario/ReUse-App-Firebase-API)]
+
+2 - Instale as dependências no terminal do VS Code: 
+
+"npm install"
+
+3 - Configure as variáveis de ambiente:
+Crie um arquivo chamado .env na raiz do projeto. Adicione a sua string de conexão com o banco de dados PostgreSQL:
+
+DATABASE_URL="postgresql://usuario:senha@localhost:5432/reuse_db?schema=public"
+
+4 - Sincronize o banco de dados:
+npx prisma generate
+npx prisma db push
+
+5 - Inicie o servidor de desenvolvimento:
+npm run dev
+
+6 - Acesse a plataforma:
+Acesse http://localhost:3000 para navegar pelo ReUse
+
+
+## Estrutura do projeto
+
+reuse-novo/
+├── prisma/
+│   └── schema.prisma
+├── public/
+│   └── seja_bem_vindo.gif
+├── src/ (ou na raiz, dependendo da sua configuração inicial)
+│   ├── lib/
+│   │   └── prisma.ts
+│   └── app/
+│       ├── components/
+│       │   ├── Header.tsx
+│       │   └── Header.module.css
+│       ├── cadastro/
+│       │   └── page.tsx
+│       ├── produto/
+│       │   └── [id]/
+│       │       └── page.tsx
+│       ├── page.tsx
+│       └── page.module.css
+├── package.json
+└── next.config.js

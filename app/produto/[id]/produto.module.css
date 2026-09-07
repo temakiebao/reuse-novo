@@ -1,0 +1,259 @@
+.container {
+  min-height: 100vh;
+  background-color: #f3f4f6;
+  padding-bottom: 4rem;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.headerContent {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.backLink {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #2563eb;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.backLink:hover {
+  text-decoration: underline;
+}
+
+.logoBadge {
+  font-size: 1.125rem;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  background-color: #eff6ff;
+  color: #2563eb;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #dbeafe;
+}
+
+.logoTextDark {
+  color: #1f2937;
+}
+
+.contentWrapper {
+  max-width: 64rem;
+  margin: 2rem auto 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .mainGrid {
+    grid-template-columns: 1.6fr 1fr;
+    align-items: start;
+  }
+}
+
+.imageCard {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+}
+
+.imageWrapper {
+  width: 100%;
+  height: 24rem;
+  background-color: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.productImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.placeholderIcon {
+  font-size: 1rem;
+  color: #9ca3af;
+}
+
+.sidebarCard {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.priceSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.priceLabel {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.price {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #111827;
+}
+
+.badgeRowSidebar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.categoryBadge {
+  color: #2563eb;
+  background-color: #eff6ff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid #dbeafe;
+}
+
+.ratingBadge {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #f59e0b;
+}
+
+.securityBox {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  padding: 0.875rem;
+}
+
+.securityTitle {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.2rem;
+}
+
+.securityText {
+  font-size: 0.75rem;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.actionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.btnComprar {
+  width: 100%;
+  background-color: #7c3aed;
+  color: #ffffff;
+  padding: 0.875rem;
+  border-radius: 0.75rem;
+  font-weight: bold;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  box-shadow: 0 4px 6px -1px rgba(124, 58, 237, 0.2);
+}
+
+.btnComprar:hover {
+  background-color: #6d28d9;
+}
+
+.btnChat {
+  width: 100%;
+  background-color: #ffffff;
+  color: #374151;
+  padding: 0.875rem;
+  border-radius: 0.75rem;
+  font-weight: bold;
+  font-size: 0.95rem;
+  border: 1px solid #d1d5db;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btnChat:hover {
+  background-color: #f9fafb;
+}
+
+.bottomSection {
+  width: 100%;
+}
+
+.detailsCard {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  padding: 1.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+}
+
+.productTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+.divider {
+  height: 1px;
+  background-color: #f3f4f6;
+  margin: 1.25rem 0;
+}
+
+.descriptionBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.descTitle {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.descText {
+  font-size: 0.95rem;
+  color: #4b5563;
+  line-height: 1.6;
+}
