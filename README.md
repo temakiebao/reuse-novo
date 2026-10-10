@@ -9,7 +9,11 @@ Nesta Sprint, nosso time ficou responsável em escolher uma área da plataforma 
 O desafio é colocar em prática os conhecimentos adquiridos e desenvolver uma das áreas da plataforma ReUse com poderoso Framework.
 
 ## Ferramentas utilizadas  
-React NextJS e Prisma.
+React NextJS, Prisma e Vercel
+
+## Hospedagem
+
+Vercel: https://reuse-novo.vercel.app/
 
 ## INSTRUÇÕES PARA AQUELES QUE QUEREM RODAR O PROJETO PURO
 Siga estas instruções simples para configurar o ambiente e testar a plataforma:
