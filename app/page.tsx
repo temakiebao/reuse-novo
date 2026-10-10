@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 // Catálogo simulado para preencher as abas sem sobrecarregar o banco de dados
 const produtosDeEnfeite = [
   {
-    id: 'mock-1',
+    id: '1',
     title: 'Placa de Vídeo RTX 3060 12GB',
     description: 'Placa em excelente estado, pouco uso em jogos, com caixa original.',
     price: 'R$ 1.650,00',
@@ -18,7 +18,7 @@ const produtosDeEnfeite = [
     tag: 'Destaque'
   },
   {
-    id: 'mock-2',
+    id: '2',
     title: 'Console PlayStation 5 Slim 1TB',
     description: 'Acompanha dois controles originais e 3 jogos físicos inclusos.',
     price: 'R$ 1.500,00',
@@ -28,7 +28,7 @@ const produtosDeEnfeite = [
     tag: 'Destaque'
   },
   {
-    id: 'mock-3',
+    id: '3',
     title: 'Kit Memória RAM 16GB (2x8GB) DDR4',
     description: 'Memórias de 3200MHz com dissipador RGB impecável.',
     price: 'R$ 320,00',
@@ -38,7 +38,7 @@ const produtosDeEnfeite = [
     tag: 'Destaque'
   },
   {
-    id: 'mock-4',
+    id: '4',
     title: 'Processador AMD Ryzen 5 5600X',
     description: 'Acompanha cooler Wraith Stealth original nunca usado.',
     price: 'R$ 850,00',
@@ -48,7 +48,7 @@ const produtosDeEnfeite = [
     tag: 'Geral'
   },
   {
-    id: 'mock-5',
+    id: '5',
     title: 'Notebook Gamer Core i7 RTX 3050',
     description: 'Tela de 144Hz, 16GB RAM e SSD NVMe de 512GB.',
     price: 'R$ 4.200,00',
@@ -58,7 +58,7 @@ const produtosDeEnfeite = [
     tag: 'Geral'
   },
   {
-    id: 'mock-6',
+    id: '6',
     title: 'Headset Gamer Havit H2015D',
     description: 'Som surround 5.1, microfone com cancelamento de ruído.',
     price: 'R$ 180,00',
@@ -71,9 +71,14 @@ const produtosDeEnfeite = [
 
 export default async function Home() {
   // Busca apenas os itens reais cadastrados pelo usuário no banco PostgreSQL via Prisma
-  const meusItensBanco = await prisma.item.findMany({
-    orderBy: { createdAt: 'desc' },
-  })
+  let meusItensBanco: any[] = [];
+  try {
+    meusItensBanco = await prisma.item.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
+  } catch (e) {
+    meusItensBanco = [];
+  }
 
   const destaques = produtosDeEnfeite.filter(p => p.tag === 'Destaque')
 
@@ -134,7 +139,7 @@ export default async function Home() {
 
                     <div className={styles.cardHeader}>
                       <span className={styles.cardCategory}>{item.category}</span>
-                      <span className={styles.cardRating}>⭐ {item.rating}</span>
+                      <span className={styles.cardRating}>⭐ {item.rating || '5.0'}</span>
                     </div>
                     
                     <h4 className={styles.cardTitle}>{item.title}</h4>
@@ -175,9 +180,13 @@ export default async function Home() {
                 </div>
                 <div className={styles.cardFooter}>
                   <span className={styles.cardPrice}>{item.price}</span>
-                  <span className={styles.btnDetails} style={{ textAlign: 'center', background: '#f3f4f6', color: '#374151' }}>
+                  <Link 
+                    href={`/produto/${item.id}`} 
+                    className={styles.btnDetails} 
+                    style={{ textAlign: 'center', background: '#f3f4f6', color: '#374151' }}
+                  >
                     Ver Detalhes
-                  </span>
+                  </Link>
                 </div>
               </div>
             ))}
@@ -207,9 +216,13 @@ export default async function Home() {
                 </div>
                 <div className={styles.cardFooter}>
                   <span className={styles.cardPrice}>{item.price}</span>
-                  <span className={styles.btnDetails} style={{ textAlign: 'center', background: '#f3f4f6', color: '#374151' }}>
+                  <Link 
+                    href={`/produto/${item.id}`} 
+                    className={styles.btnDetails} 
+                    style={{ textAlign: 'center', background: '#f3f4f6', color: '#374151' }}
+                  >
                     Ver Detalhes
-                  </span>
+                  </Link>
                 </div>
               </div>
             ))}

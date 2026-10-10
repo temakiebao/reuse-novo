@@ -2,42 +2,107 @@ import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { redirect } from 'next/navigation'
 import Header from '../../components/Header'
-import styles from '../../page.module.css'
+import styles from './produto.module.css'
 
 interface PageProps {
   params: Promise<{ id: string }>
 }
 
+const PRODUTOS_MOCK: Record<string, any> = {
+  '1': {
+    id: '1',
+    title: 'Placa de Vídeo RTX 3060 12GB',
+    category: 'Placas de Vídeo',
+    rating: '4.9',
+    price: 'R$ 1.650,00',
+    description: 'Placa de vídeo em excelente estado de conservação, pouco tempo de uso voltado para jogos leves e estudos. Acompanha caixa original e nota fiscal. Nunca utilizada para mineração.',
+    image: 'https://photos.enjoei.com.br/placa-de-video-gainward-geforce-rtx-3060-12gb-gddr6-ghost-series/1200xN/czM6Ly9waG90b3MuZW5qb2VpLmNvbS5ici9wcm9kdWN0cy80Njk3Mjg4LzI3Yjg0NGE0MmIyYjRkODgzOThiMGQ5NzVlMTY5YTNlLmpwZw'
+  },
+  '2': {
+    id: '2',
+    title: 'Console PlayStation 5 Slim 1TB',
+    category: 'Video Games',
+    rating: '5.0',
+    price: 'R$ 1.500,00',
+    description: 'Console impecável com 1TB de armazenamento SSD ultra veloz. Acompanha dois controles DualSense originais e 3 jogos físicos inclusos.',
+    image: 'https://cdn.awsli.com.br/2500x2500/2598/2598981/produto/401307175/51638419443819ed04838d8be97dced0-7m1u5yz5oi.jpg'
+  },
+  '3': {
+    id: '3',
+    title: 'Kit Memória RAM 16GB (2x8GB) DDR4',
+    category: 'Memórias e Armazenamento',
+    rating: '4.8',
+    price: 'R$ 320,00',
+    description: 'Kit dual channel de memórias 3200MHz com dissipador RGB impecável. Funcionando perfeitamente.',
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJWMoFBTpgpn_Tp-HQ17SS5s2el9aZ42Q6Hl1f0GvuEneFZXnYGyxoYXM&s=10'
+  },
+  '4': {
+    id: '4',
+    title: 'Processador AMD Ryzen 5 5600X',
+    category: 'Processadores',
+    rating: '5.0',
+    price: 'R$ 850,00',
+    description: 'Acompanha cooler Wraith Stealth original nunca usado.',
+    image: 'https://images.unsplash.com/photo-1555680202-c86f0e12f086?auto=format&fit=crop&w=600&q=80'
+  },
+  '5': {
+    id: '5',
+    title: 'Notebook Gamer Core i7 RTX 3050',
+    category: 'Computadores',
+    rating: '4.7',
+    price: 'R$ 4.200,00',
+    description: 'Tela de 144Hz, 16GB RAM e SSD NVMe de 512GB.',
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0DuK1UtqFrnUXUmZVSbFoAenqm9q4mhDGoDKjAislpXWt8CKoi_Xhhdw&s=10'
+  },
+  '6': {
+    id: '6',
+    title: 'Headset Gamer Havit H2015D',
+    category: 'Periféricos',
+    rating: '4.9',
+    price: 'R$ 180,00',
+    description: 'Som surround 5.1, microfone com cancelamento de ruído.',
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6YCUHkCxpGMtpQ4Bl4aaCRUUEhs2r5Dm_90C08B4_ug&s'
+  }
+}
+
 export default async function ProdutoDetalhes({ params }: PageProps) {
   const { id } = await params
 
-  // Busca o item no banco de dados pelo ID
-  const item = await prisma.item.findUnique({
-    where: { id },
-  })
+  let itemBanco = null
+  try {
+    itemBanco = await prisma.item.findUnique({
+      where: { id },
+    })
+  } catch (e) {
+    itemBanco = null
+  }
+
+  const item = itemBanco || PRODUTOS_MOCK[id]
 
   if (!item) {
     return (
       <main className={styles.mainContainer}>
         <Header />
-        <div className={styles.contentWrapper} style={{ textAlign: 'center', padding: '4rem 0' }}>
-          <h2>Item não encontrado</h2>
-          <Link href="/" className={styles.btnDetails} style={{ display: 'inline-block', marginTop: '1rem' }}>Voltar ao Início</Link>
+        <div className={styles.notFoundWrapper}>
+          <h2 className={styles.notFoundTitle}>Item não encontrado</h2>
+          <Link href="/" className={styles.btnVoltarInicio}>
+            Voltar ao Início
+          </Link>
         </div>
       </main>
     )
   }
 
-  // Server Action para excluir o anúncio do banco
   async function excluirAnuncio() {
     'use server'
-    await prisma.item.delete({
-      where: { id },
-    })
+    try {
+      await prisma.item.delete({
+        where: { id },
+      })
+    } catch (e) {}
     redirect('/')
   }
 
-  // Server Action para atualizar o anúncio no banco
   async function editarAnuncio(formData: FormData) {
     'use server'
     const title = formData.get('title') as string
@@ -45,10 +110,12 @@ export default async function ProdutoDetalhes({ params }: PageProps) {
     const price = formData.get('price') as string
     const category = formData.get('category') as string
 
-    await prisma.item.update({
-      where: { id },
-      data: { title, description, price, category },
-    })
+    try {
+      await prisma.item.update({
+        where: { id },
+        data: { title, description, price, category },
+      })
+    } catch (e) {}
 
     redirect('/')
   }
@@ -57,82 +124,117 @@ export default async function ProdutoDetalhes({ params }: PageProps) {
     <main className={styles.mainContainer}>
       <Header />
 
-      <div className={styles.contentWrapper} style={{ maxWidth: '50rem' }}>
-        <Link href="/" style={{ display: 'inline-block', marginBottom: '1.5rem', color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>
-          ← Voltar para a página inicial
-        </Link>
+      <div className={styles.contentWrapper}>
+        
+        {/* BARRA SUPERIOR DE NAVEGAÇÃO / VOLTAR */}
+        <div className={styles.topNavRow}>
+          <Link href="/" className={styles.btnNavVoltar}>
+            ← Voltar para a página inicial
+          </Link>
+        </div>
 
-        {/* Bloco principal de visualização e edição */}
-        <div style={{ background: '#ffffff', borderRadius: '1rem', border: '1px solid #e5e7eb', overflow: 'hidden', padding: '2rem', marginBottom: '2rem' }}>
-          <div style={{ width: '100%', height: '22rem', background: '#f9fafb', borderRadius: '0.75rem', overflow: 'hidden', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {/* BLOCO PRINCIPAL DO ANÚNCIO */}
+        <div className={styles.cardPrincipal}>
+          <div className={styles.imagemContainer}>
             {item.image ? (
-              <img src={item.image} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={item.image} alt={item.title} className={styles.imagemProduto} />
             ) : (
-              <span style={{ fontSize: '3rem' }}>🖼️</span>
+              <span className={styles.placeholderIcon}>🖼️</span>
             )}
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <div className={styles.infoRow}>
             <span className={styles.cardCategory}>{item.category}</span>
-            <span style={{ fontWeight: 700, color: '#f59e0b' }}>⭐ {item.rating}</span>
+            <span className={styles.cardRating}>⭐ {item.rating || '5.0'}</span>
           </div>
 
-          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem' }}>{item.title}</h1>
-          <p style={{ fontSize: '1.5rem', fontWeight: 900, color: '#2563eb', marginBottom: '1.5rem' }}>{item.price}</p>
+          <h1 className={styles.tituloProduto}>{item.title}</h1>
+          <p className={styles.precoProduto}>{item.price}</p>
           
-          <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '1.5rem', marginBottom: '2rem' }}>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.5rem', color: '#374151' }}>Descrição do Vendedor</h3>
-            <p style={{ fontSize: '1rem', color: '#4b5563', lineHeight: '1.6' }}>{item.description}</p>
+          <div className={styles.descricaoSection}>
+            <h3 className={styles.secaoTitulo}>Descrição do Vendedor</h3>
+            <p className={styles.descricaoTexto}>{item.description}</p>
           </div>
 
-          {/* Botão de Excluir Anúncio */}
-          <form action={excluirAnuncio} style={{ borderTop: '1px solid #e5e7eb', paddingTop: '1.5rem' }}>
-            <button 
-              type="submit" 
-              style={{ backgroundColor: '#dc2626', color: '#fff', border: 'none', padding: '0.75rem 1.25rem', borderRadius: '0.5rem', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}
-            >
+          {/* ÁREA DE AÇÕES: TROCAR + COMPRAR (SEM VALOR NO BOTÃO) */}
+          <div className={styles.botoesAcaoGrid}>
+            <Link href={`/trocas/${item.id}`} className={styles.btnProporTroca}>
+              🔄 Propor Troca deste Hardware
+            </Link>
+
+            <button className={styles.btnComprar}>
+              🛒 Comprar
+            </button>
+          </div>
+
+          {/* FORMULÁRIO DE EXCLUSÃO */}
+          <form action={excluirAnuncio} className={styles.excluirForm}>
+            <button type="submit" className={styles.btnExcluir}>
               🗑️ Excluir este Anúncio
             </button>
           </form>
         </div>
 
-        {/* Seção de Formulário para Editar Anúncio */}
-          <div style={{ background: '#ffffff', borderRadius: '1rem', border: '1px solid #e5e7eb', padding: '2rem' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', marginBottom: '1rem' }}>✏️ Editar Informações do Anúncio</h2>
-            
-            <form action={editarAnuncio} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <div>
-                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.3rem', color: '#374151' }}>Título</label>
-                <input type="text" name="title" defaultValue={item.title} required style={{ width: '100%', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid #d1d5db', fontSize: '1rem' }} />
-              </div>
+        {/* BLOCO DE EDIÇÃO DO ANÚNCIO */}
+        <div className={styles.cardEdicao}>
+          <h2 className={styles.tituloEdicao}>✏️ Editar Informações do Anúncio</h2>
+          
+          <form action={editarAnuncio} className={styles.formEdicao}>
+            <div className={styles.campoForm}>
+              <label className={styles.labelForm}>Título</label>
+              <input 
+                type="text" 
+                name="title" 
+                defaultValue={item.title} 
+                required 
+                className={styles.inputForm} 
+              />
+            </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.3rem', color: '#374151' }}>Preço</label>
-                  <input type="text" name="price" defaultValue={item.price} required style={{ width: '100%', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid #d1d5db', fontSize: '1rem' }} />
-                </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.3rem', color: '#374151' }}>Categoria</label>
-                  <select name="category" defaultValue={item.category} style={{ width: '100%', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid #d1d5db', fontSize: '1rem', background: '#fff' }}>
-                    <option value="Placas de Vídeo">Placas de Vídeo</option>
-                    <option value="Computadores">Computadores</option>
-                    <option value="Video Games">Video Games</option>
-                    <option value="Processadores">Processadores</option>
-                    <option value="Periféricos">Periféricos</option>
-                  </select>
-                </div>
+            <div className={styles.formRowDoisCampos}>
+              <div className={styles.campoForm}>
+                <label className={styles.labelForm}>Preço</label>
+                <input 
+                  type="text" 
+                  name="price" 
+                  defaultValue={item.price} 
+                  required 
+                  className={styles.inputForm} 
+                />
               </div>
-
-              <div>
-                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.3rem', color: '#374151' }}>Descrição</label>
-                <textarea name="description" rows={4} required style={{ width: '100%', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid #d1d5db', fontSize: '1rem' }}>{item.description}</textarea>
+              <div className={styles.campoForm}>
+                <label className={styles.labelForm}>Categoria</label>
+                <select 
+                  name="category" 
+                  defaultValue={item.category} 
+                  className={styles.selectForm}
+                >
+                  <option value="Placas de Vídeo">Placas de Vídeo</option>
+                  <option value="Computadores">Computadores</option>
+                  <option value="Video Games">Video Games</option>
+                  <option value="Processadores">Processadores</option>
+                  <option value="Periféricos">Periféricos</option>
+                </select>
               </div>
+            </div>
 
-              <button type="submit" className={styles.btnDetails} style={{ alignSelf: 'flex-start', padding: '0.75rem 1.5rem', border: 'none', cursor: 'pointer', fontWeight: 700 }}>
-                Salvar Alterações
-              </button>
-            </form>
-          </div>
+            <div className={styles.campoForm}>
+              <label className={styles.labelForm}>Descrição</label>
+              <textarea 
+                name="description" 
+                rows={4} 
+                defaultValue={item.description} 
+                required 
+                className={styles.textareaForm} 
+              />
+            </div>
+
+            <button type="submit" className={styles.btnSalvarAlteracoes}>
+              Salvar Alterações
+            </button>
+          </form>
+        </div>
+
       </div>
     </main>
   )
